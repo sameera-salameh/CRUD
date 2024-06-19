@@ -16,6 +16,23 @@
                             <input type="text" class="form-control" id="title" name="title" value="{{$post->title }}" required>
                         </div>
                         <div class="form-group">
+                            <label for="category">Category</label>
+                            <select class="form-control" id="category" name="category_id" required>
+                                <option value="">Select a category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" {{ $post->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">Tags</label>
+                            <select multiple class="form-control" id="tags" name="tags[]" required>
+                                @foreach ($tags as $tag)
+                                <option value="{{ $tag->id }}"@if($post->tags->contains($tag->id)) selected @endif>{{ $tag->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                        <div class="form-group">
                             <label for="description">Description</label>
                             <textarea class="form-control" id="description" name="description" rows="3" required>{{ $post->description}}</textarea>
                         </div>

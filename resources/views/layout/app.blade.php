@@ -23,15 +23,18 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
+                    @auth
                     <li class="nav-item">
-                        <a class="btn text-dark m-1" href="#" style="background-color: #aee2f7">Log in</a>
+                        <a class="btn text-dark m-1" href="{{route('posts.index')}}" style="background-color: #aee2f7">Posts</a>
+                        <a class="btn text-dark m-1" href="{{route('logout')}}" style="background-color: #aee2f7">Logout</a>
                     </li>
+                    @endauth
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container my-auto ps-5">
+    <div class="container my-auto ps-5 pt-5">
         @yield('content')
     </div>
 </body>

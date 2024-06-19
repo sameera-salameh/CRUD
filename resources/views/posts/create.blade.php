@@ -20,6 +20,23 @@
                             <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                         </div>
                         <div class="form-group">
+                            <label for="category">Category</label>
+                            <select class="form-control" id="category" name="category_id" required>
+                                <option value="">Select a category</option>
+                                @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tags">Tags</label>
+                        <select multiple class="form-control" id="tags" name="tags[]" required>
+                            @foreach ($tags as $tag)
+                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                        <div class="form-group">
                             <label for="image">Image</label>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="image" name="image" hidden>
