@@ -13,10 +13,9 @@ class TagController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('viewAny', Tag::class);
             $tags = Tag::all(); 
             return view('tags.index', compact('tags'));
-        }
     }
 
     /**
@@ -24,9 +23,8 @@ class TagController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('create', Tag::class);
             return view('tags.create');
-        }
     }
 
     /**
@@ -34,7 +32,7 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('create', Tag::class);
             $request->validate([
                 'name' => 'required|string|max:255',
             ]);
@@ -43,7 +41,6 @@ class TagController extends Controller
             ]);
 
             return redirect()->route('tags.index')->with('success', 'Tag created successfully');
-        }
     }
 
     /**
@@ -51,9 +48,8 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('view', Tag::class);
             return view('tags.show', compact('tag'));
-        }
     }
 
     /**
@@ -61,9 +57,8 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('update', Tag::class);
             return view('tags.edit', compact('tag'));
-        }
     }
 
     /**
@@ -71,7 +66,7 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('update', Tag::class);
             $request->validate([
                 'name' => 'required|string|max:255',
             ]);
@@ -81,7 +76,6 @@ class TagController extends Controller
             ]);
 
             return redirect()->route('tags.index')->with('success', 'tag updated successfully.');
-        }
     }
 
     /**
@@ -89,9 +83,8 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('delete', Tag::class);
             $tag->delete();
             return redirect()->route('tags.index')->with('success', 'tag deleted successfully.');
-        }
     }
 }

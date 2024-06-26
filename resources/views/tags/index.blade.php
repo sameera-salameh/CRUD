@@ -7,9 +7,9 @@
     <div class="row">
         <div class="col-3">
             <div class="list-group position-fixed  me-3" style="top: 5rem; left:1rem">
-                @if(Auth::user()->is_admin)
+                @can('create', App\Models\Tag::class)
                     <a href="{{ route('tags.create') }}" class="list-group-item list-group-item-action bg-transparent">Add New Tag</a>
-                @endif
+                @endcan 
             </div>
         </div>
         <div class="content">

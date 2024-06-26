@@ -25,14 +25,16 @@
                         @endforeach
                     </p>
                     <img src="/images/{{$post->image}}" class="card-img-top img-fluid rounded mb-3 w-100" alt="" >
-                    @if(Auth::id() === $post->user_id)
+                    @can('update', $post)
                     <a href="{{ route('posts.edit', $post->id) }}" class="btn" style="background-color: #f1e6cb; color: #ffffff;">Edit</a>
+                    @endcan
+                    @can('delete', $post)
                     <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn" style="background-color: #b2bec3; color: #ffffff;">Delete</button>
                     </form>
-                    @endif
+                    @endcan
                 </div>
                 <div class="card bg-white bg-opacity-50 mt-3">
                     <div class="card-body">
@@ -48,16 +50,16 @@
                                     </div>
                                 </div>
                                 <p>{{ $comment->content }}</p>
-                                @if(Auth::id() === $comment->user_id)
+                                @can('update', $comment)
                                 <a href="{{ route('comments.edit', $comment->id) }}" class="btn" style="background-color: #f1e6cb; color: #ffffff;">Edit</a>
-                            @endif
-                                @if(Auth::id() === $post->user_id || Auth::id() === $comment->user_id)
-                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="d-inline">
+                                 @endcan
+                                 @can('delete',$comment)
+                                 <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"class="btn" style="background-color: #b2bec3; color: #ffffff;">Delete</button>
                                     </form>
-                                @endif
+                                @endcan
                             </div>
                             <hr> 
                         @endforeach

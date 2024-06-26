@@ -9,10 +9,6 @@
             <div class="list-group position-fixed  me-3" style="top: 5rem; left:1rem">
                 <h3>Hi, {{Auth::user()->name}}!</h3>
                 <a href="{{ route('posts.create') }}" class="list-group-item list-group-item-action bg-transparent">Create New Post</a>
-                @if(Auth::user()->is_admin)
-                    <a href="{{ route('categories.index') }}" class="list-group-item list-group-item-action bg-transparent">Categories</a>
-                    <a href="{{ route('tags.index') }}" class="list-group-item list-group-item-action bg-transparent">Tags</a>
-                @endif
             </div>
         </div>
         

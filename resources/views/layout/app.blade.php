@@ -25,6 +25,12 @@
                 <ul class="navbar-nav ms-auto">
                     @auth
                     <li class="nav-item">
+                        @can('viewAny', App\Models\Category::class)
+                        <a class="btn text-dark m-1" href="{{ route('categories.index') }}"  style="background-color: #aee2f7" >Categories</a>
+                        @endcan
+                        @can('viewAny', App\Models\Tag::class)
+                            <a  class="btn text-dark m-1" href="{{ route('tags.index') }}" style="background-color: #aee2f7" >Tags</a>
+                        @endcan
                         <a class="btn text-dark m-1" href="{{route('posts.index')}}" style="background-color: #aee2f7">Posts</a>
                         <a class="btn text-dark m-1" href="{{route('logout')}}" style="background-color: #aee2f7">Logout</a>
                     </li>

@@ -13,10 +13,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->is_admin) {
-            $categories = Category::all(); 
-            return view('categories.index', compact('categories'));
-        }
+        $this->authorize('viewAny', Category::class);
+        $categories = Category::all(); 
+        return view('categories.index', compact('categories'));
     }
 
     /**
@@ -24,9 +23,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('create', Category::class);
             return view('categories.create');
-        }
     }
 
     /**
@@ -34,10 +32,10 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('create', Category::class);
             $request->validate([
                 'name' => 'required|string|max:255',
-                'image' => 'image|max:2048',
+                'image' => 'required|image|max:2048',
             ]);
             $imageName = null;
             if ($request->hasFile('image')) {
@@ -51,7 +49,6 @@ class CategoryController extends Controller
             ]);
 
             return redirect()->route('categories.index')->with('success', 'Category created successfully');
-        }
     }
 
     /**
@@ -59,9 +56,9 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('view', Category::class);
             return view('categories.show', compact('category'));
-        }
+        
     }
 
     /**
@@ -69,9 +66,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        if (Auth::user()->is_admin) {
-            return view('categories.edit', compact('category'));
-        }
+        $this->authorize('update', Category::class);
+        return view('categories.edit', compact('category'));
     }
 
     /**
@@ -79,10 +75,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('update', Category::class);
             $request->validate([
                 'name' => 'required|string|max:255',
-                'image' => 'image|max:2048',
+                'image' => 'required|image|max:2048',
             ]);
             $imageName = $category->image;
             if ($request->hasFile('image')) {
@@ -96,7 +92,6 @@ class CategoryController extends Controller
             ]);
 
             return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
-        }
     }
 
     /**
@@ -104,9 +99,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        if (Auth::user()->is_admin) {
+        $this->authorize('delete', Category::class);
             $category->delete();
             return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
         }
-    }
 }

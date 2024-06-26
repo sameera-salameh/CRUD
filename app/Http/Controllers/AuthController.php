@@ -41,8 +41,6 @@ class AuthController extends Controller
             $validatedData['image'] = $imagename;
         }
             $validatedData['password'] = Hash::make($validatedData['password']);
-
-    
         $user = User::create($validatedData);
         Auth::login($user);
         return redirect()->route('posts.index');
