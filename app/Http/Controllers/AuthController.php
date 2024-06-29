@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,48 +19,28 @@ class AuthController extends Controller
     
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('posts.index');
+            $user=Auth::user();
+            if($user->hasRole('admin')){
+            $users = User::whereNot('id' , auth()->id())->get();
+            $categories = Category::all();
+            $tags =Tag::all();
+            $blockedUsers = $users->where('is_block', true)->sortBy('name');
+            $unblockedUsers = $users->where('is_block', false)->sortBy('name');
+            return view('dashboard' , compact('users' , 'tags', 'categories' , 'blockedUsers' , 'unblockedUsers'));}
         }
     
         return back()->withErrors([
             'loginError' => 'Invalid credentials',
         ]);
     }
-    
-    
-    public function register(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'image' => 'image'
-        ]);
-        $imagename = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imagename = time() . "." . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imagename);
-            $validatedData['image'] = $imagename;
-        }
-            $validatedData['password'] = Hash::make($validatedData['password']);
-        $user = User::create($validatedData);
-        Auth::login($user);
-        return redirect()->route('posts.index');
-    }
 
     public function logout(Request $request){
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return redirect('/login');
     }
     public function showLoginForm(){
         return view('auth.login'); 
-    }
-
-    // Add this method to show the registration form
-    public function showRegistrationForm(){
-        return view('auth.register');
     }
 }

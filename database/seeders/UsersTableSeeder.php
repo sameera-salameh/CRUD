@@ -14,14 +14,14 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
+        $admin =User::create([
             'name' => 'Admin',
             'email' => 'admin@test.com',
             'email_verified_at' => now(),
             'password' => Hash::make('admin0123'), 
-            'is_admin' => true,
             'created_at' => now(),
             'updated_at' => now()
         ]);
+        $admin->assignRole('admin');
     }
 }

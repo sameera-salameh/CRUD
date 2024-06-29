@@ -28,7 +28,7 @@
     </div>
 @endif
 
-                        <button type="submit" class="btn" style="background-color: #F5E1D2; color: #ffffff;">Login</button>
+                        <button type="submit" class="btn btn-primary">Login</button>
                     </form>
                 </div>
             </div>

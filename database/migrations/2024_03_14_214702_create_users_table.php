@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('image')->nullable();
-            $table->boolean('is_admin')->default(false);
+            $table->boolean('is_block')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

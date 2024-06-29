@@ -6,7 +6,9 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card bg-white bg-opacity-50">
-                <div class="card-header">Edit The Category</div>
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Edit The Category</h3>
+                </div>     
                 <div class="card-body">
                     <form action="{{ route('categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -25,7 +27,7 @@
                                 <label class="btn btn-light text-dark m-1" for="image">Choose Image</label>
                             </div>
                         </div>
-                        <button type="submit" class="btn" style="background-color: #f1e6cb; color: #ffffff;">Update</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>
             </div>

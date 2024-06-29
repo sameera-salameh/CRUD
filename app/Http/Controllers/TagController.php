@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Traits\HasPermissions;
 
 class TagController extends Controller
 {
+    use HasPermissions;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $this->authorize('viewAny', Tag::class);
-            $tags = Tag::all(); 
-            return view('tags.index', compact('tags'));
+           //
     }
 
     /**
@@ -23,8 +23,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        $this->authorize('create', Tag::class);
-            return view('tags.create');
+              //
     }
 
     /**
@@ -32,23 +31,23 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Tag::class);
-            $request->validate([
+                  $request->validate([
                 'name' => 'required|string|max:255',
             ]);
             $tag = Tag::create([
                 'name' => $request->name,
             ]);
 
-            return redirect()->route('tags.index')->with('success', 'Tag created successfully');
-    }
+            return redirect()->route('dashboard.index')->with('success', 'Tag created successfully');
+        }
+    
 
     /**
      * Display the specified resource.
      */
     public function show(Tag $tag)
     {
-        $this->authorize('view', Tag::class);
+        
             return view('tags.show', compact('tag'));
     }
 
@@ -57,8 +56,7 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        $this->authorize('update', Tag::class);
-            return view('tags.edit', compact('tag'));
+        return view('tags.edit', compact('tag'));
     }
 
     /**
@@ -66,8 +64,7 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
-        $this->authorize('update', Tag::class);
-            $request->validate([
+                $request->validate([
                 'name' => 'required|string|max:255',
             ]);
           
@@ -75,16 +72,17 @@ class TagController extends Controller
                 'name' => $request->name,
             ]);
 
-            return redirect()->route('tags.index')->with('success', 'tag updated successfully.');
+            return redirect()->route('dashboard.index')->with('success', 'tag updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Tag $tag)
     {
-        $this->authorize('delete', Tag::class);
+        
             $tag->delete();
-            return redirect()->route('tags.index')->with('success', 'tag deleted successfully.');
-    }
-}
+            return redirect()->route('dashboard.index')->with('success', 'tag deleted successfully.');
+    }}
+

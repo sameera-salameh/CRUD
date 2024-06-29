@@ -16,25 +16,16 @@ class PostController extends Controller
     {
         $this->authorize('viewAny', Post::class);
         $posts = Post::all();
-        return view('posts.index')->with("posts", $posts);
+        return response()->json(['posts' => $posts]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $this->authorize('create', Post::class);
-        $categories = Category::all();
-        $tags = Tag::all();
-        return view('posts.create', compact('categories', 'tags'));
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Post::class);
         $validatedData = $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -56,7 +47,7 @@ class PostController extends Controller
             'category_id' => $validatedData['category_id'],
         ]);
         $post->tags()->sync($validatedData['tags']);
-        return redirect()->route('posts.index')->with('success', 'Post add successfully ');
+        return response()->json(['message' => 'Post added successfully']);
     }
 
 
@@ -66,27 +57,16 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $this->authorize('view', $post);
-        return view("posts.show")->with("post", $post);
+        return response()->json(['post' => $post]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Post $post)
-    {
-        $categories = Category::all();
-        $tags = Tag::all();
-        $this->authorize('update', $post);
-
-        return view('posts.edit', compact('post', 'categories', 'tags'));
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Post $post)
     {
-        $this->authorize('update',  $post);
+        if($this->authorize('update',  $post))
         $validatedData = $request->validate([
             'title' => 'required',
             'description' => 'required',
@@ -109,7 +89,7 @@ class PostController extends Controller
             'category_id' => $validatedData['category_id'],
         ]);
         $post->tags()->sync($validatedData['tags']);
-        return redirect()->route('posts.index')->with('success', 'Post updated successfully ');
+        return response()->json(['message' => 'Post updated successfully']);
     }
 
     /**
@@ -121,6 +101,6 @@ class PostController extends Controller
         $post->comments()->delete();
         $post->tags()->detach();
         $post->delete();
-        return redirect()->route("posts.index")->with('success');
+        return response()->json(['message' => 'Post deleted successfully']);
     }
 }

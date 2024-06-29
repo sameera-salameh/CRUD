@@ -24,7 +24,7 @@ class CommentController extends Controller
     {
         $post = Post::findOrFail($postId); 
         $this->authorize('create', Comment::class);
-        return view('comments.create',compact('post'));
+        return response()->json(['message' => 'Create comment successfully']);
     }
 
     /**
@@ -43,8 +43,8 @@ class CommentController extends Controller
             'user_id' => auth()->id(),
             'post_id' => $request->post_id,
         ]);
-        return redirect()->route('posts.show',['post' => $request->post_id])->with('success', 'Comment add successfully ');
-
+        
+        return response()->json(['message' => 'Comment added successfully']);
     }
 
     /**
@@ -55,14 +55,7 @@ class CommentController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Comment $comment)
-    {
-        $this->authorize("update", $comment);
-        return view('comments.edit',compact('comment'));
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -70,14 +63,15 @@ class CommentController extends Controller
     public function update(Request $request, Comment $comment)
     {
         $this->authorize('update',$comment);
-    $validatedData = $request->validate([
+        $validatedData = $request->validate([
         'content' => 'required',
     ]);
 
     $comment->update($validatedData);
 
-    return redirect()->route('posts.show', $comment->post_id)->with('success', 'Comment updated successfully');
+    return response()->json(['message' => 'Comment updated successfully']);
 }
+
 
 
     /**
@@ -90,6 +84,6 @@ class CommentController extends Controller
 
     $comment->delete();
     
-    return back()->with('success', 'Comment deleted successfully');
-    }
+    return response()->json(['message' => 'Comment deleted successfully']);
+}
 }

@@ -13,33 +13,23 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', Category::class);
         $categories = Category::all(); 
-        return view('categories.index', compact('categories'));
+        return view('dashboard.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $this->authorize('create', Category::class);
-            return view('categories.create');
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Category::class);
             $request->validate([
                 'name' => 'required|string|max:255',
-                'image' => 'required|image|max:2048',
+                'category_image' => 'required|image|max:2048',
             ]);
             $imageName = null;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
+            if ($request->hasFile('category_image')) {
+                $image = $request->file('category_image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('images'), $imageName);
             }
@@ -48,7 +38,7 @@ class CategoryController extends Controller
                 'image' => $imageName,
             ]);
 
-            return redirect()->route('categories.index')->with('success', 'Category created successfully');
+            return redirect()->route('dashboard.index')->with('success', 'Category created successfully');
     }
 
     /**
@@ -56,7 +46,6 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $this->authorize('view', Category::class);
             return view('categories.show', compact('category'));
         
     }
@@ -66,7 +55,6 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $this->authorize('update', Category::class);
         return view('categories.edit', compact('category'));
     }
 
@@ -75,10 +63,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $this->authorize('update', Category::class);
             $request->validate([
                 'name' => 'required|string|max:255',
-                'image' => 'required|image|max:2048',
+                'image' => 'image|max:2048',
             ]);
             $imageName = $category->image;
             if ($request->hasFile('image')) {
@@ -91,7 +78,7 @@ class CategoryController extends Controller
                 'image' => $imageName,
             ]);
 
-            return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+            return redirect()->route('dashboard.index')->with('success', 'category updated successfully.');
     }
 
     /**
@@ -99,8 +86,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $this->authorize('delete', Category::class);
             $category->delete();
-            return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+            return redirect()->route('dashboard.index')->with('success', 'Category deleted successfully.');
         }
 }
